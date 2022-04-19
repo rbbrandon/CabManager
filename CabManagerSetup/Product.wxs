@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="CabManager" Language="1033" Version="1.1.1.0" Manufacturer="Earth Dragon Software" UpgradeCode="30278492-7c19-42de-a27a-58f7711a8cdb">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Property Id="ARPURLINFOABOUT" Value="http://www.cabmanager.com.au/" />
+
+		<MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes" />
+		
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="CabManagerSetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="TemplateComponents" />
+		</Feature>
+
+    
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="CabManager">
+          <Directory Id="FilesFolder" Name="Files">
+            <Directory Id="TemplatesFolder" Name="Templates" />
+            <Directory Id="InvoicesFolder" Name="Invoices">
+              <Component Id="test" Guid="e29f1a9e-3ede-40d6-aba0-bfe451002ee3" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
+                <CreateFolder />
+              </Component>
+            </Directory>
+          </Directory>
+        </Directory>
+			</Directory>
+		</Directory>
+
+    <Feature Id="CreateEmptyInvoicesFolder" Title="testfolder" Level="1">
+      <ComponentRef Id="test"/>
+    </Feature>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<Component Id="ProductComponent">
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Name="CabManager.exe" Source="$(var.CabManager.TargetPath)" KeyPath="yes" />
+        <File Source="$(var.CabManager.TargetDir)License.rtf" />
+        <File Source="$(var.CabManager.TargetDir)Beta.rtf" />
+        <File Source="$(var.CabManager.TargetDir)Changelog.rtf" />
+			</Component>
+		</ComponentGroup>
+
+    <ComponentGroup Id="TemplateComponents" Directory="TemplatesFolder">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <Component Id="TemplateComponent" Guid="{B8031331-076F-4C75-B231-3EBCBBD8D29C}">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.CabManager.TargetDir)Files\Templates\Expenses Invoice Template.docx" />
+        <File Source="$(var.CabManager.TargetDir)Files\Templates\Expenses Template.xlsx" />
+        <File Source="$(var.CabManager.TargetDir)Files\Templates\Invoice Template.docx" />
+        <File Source="$(var.CabManager.TargetDir)Files\Templates\Taxi Running Sheets Template.xlsx" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
